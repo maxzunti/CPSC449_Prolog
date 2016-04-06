@@ -230,14 +230,58 @@ hasCommonName(plegadis, falcinellus, glossyIbis).
 hasCommonName(plegadis, chihi, whiteFacedIbis).
 hasCommonName(platalea, ajaja, roseateSpoonbill).
 
+habitat(pelecaniformes, lakePond).
+habitat(pelecaniformes, ocean).
+habitat(pelecaniformes, marsh).
+
+habitat(pelecanidae, lakePond).
+habitat(pelecanidae, ocean).
+habitat(ardeidae, marsh).
+habitat(threskiornithdae, marsh).
+
+habitat(pelecanus, ocean).
+habitat(pelecanus, lakePond).
+habitat(botaurus,marsh).
+habitat(ixobrychus,marsh).
+habitat(ardea, marsh).
+habitat(egretta, marsh).
+habitat(bubulcus, marsh).
+habitat(butorides, marsh).
+habitat(nycticorax, marsh).
+habitat(nyctanassa, marsh).
+habitat(eudocimus, marsh).
+habitat(plegadis, marsh).
+habitat(platalea, marsh).
+
+habitat(pelecanus_erythrorhynchos,lakePond).
+habitat(pelecanus_occidentalis,ocean).
+habitat(botaurus_lentiginosus,marsh).
+habitat(ixobrychus_exilis,marsh).
+habitat(ardea_herodias, marsh).
+habitat(ardea_alba, marsh).
+habitat(egretta_thula, marsh).
+habitat(egretta_caerulea, marsh).
+habitat(egretta_tricolor, marsh).
+habitat(egretta_rufescens, marsh).
+habitat(bubulcus_ibis, marsh).
+habitat(butorides_virescens, marsh).
+habitat(nycticorax_nycticorax, marsh).
+habitat(nyctanassa_violacea, marsh).
+habitat(eudocimus_albus, marsh).
+habitat(plegadis_falcinellus, marsh).
+habitat(plegadis_chihi, marsh).
+habitat(platalea_ajaja, marsh).
+
+
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
-hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N).
+hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
 hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
 isaStrict(A, B) :- hasCompoundParent(A,B).
 isaStrict(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
 isaStrict(A, A).
+
 
 isa(A, B) :- hasParent(A, B).
 isa(A, B) :- hasParent(A, C), hasParent(C, B).
@@ -249,14 +293,14 @@ synonym(A, B) :- \+(A = B), hasCommonName(B, A).                    %A is a comm
 synonym(A, B) :- \+(A = B), hasCommonName(A, B).
 synonym(A, B) :- \+(A = B), hasCommonName(C, A), hasCommonName(C, B).
 
-%countSpecies(A, N) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(G, S, A), N is 0.
+countSpecies(A, N) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(G, S, A), N = 0.
 countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
-countSpecies(A, N) :- N = 0.
-%countSpecies(A, N) :- isaStrict(X, A), species(X), N is N+1, countSpecies(A, N).
+%countSpecies(A, N) :- N = 0.
+%countSpecies(A, N) :- species(X), isaStrict(X, A), countSpecies(A, N), N is N+1.
 
 %rangesTo(A, P).
 
-%habitat(A, B).
+%habitat(A, B) :- hasCompoundName(_,S,A), .
 
 %food(A, B).
 
