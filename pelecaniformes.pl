@@ -1,3 +1,45 @@
+/*
+*** Logical taxonomy: ***
+
+order(pelecaniformes).
+
+  family(pelecanidae).
+    genus(pelecanus).
+      species(pelecanus_erythrorhynchos).
+      species(pelecanus_occidentalis).
+
+  family(ardeidae).
+    genus(botaurus).
+      species(botaurus_lentiginosus).
+    genus(ixobrychus).
+      species(ixobrychus_exilis).
+    genus(ardea).
+      species(ardea_herodias).
+      species(ardea_alba).
+    genus(egretta).
+      species(egretta_thula).
+      species(egretta_caerulea).
+      species(egretta_tricolor).
+      species(egretta_rufescens).
+    genus(bubulcus).
+      species(bubulcus_ibis);
+    genus(butorides).
+      species(butorides_virescens).
+    genus(nycticorax).
+      species(nycticorax_nycticorax).
+    genus(nyctanassa).
+      species(nyctanassa_violacea).
+
+    family(threskiornithdae).
+      genus(eudocimus).
+        species(eudocimus_albus).
+      genus(plegadis).
+        species(plegadis_falcinellus).
+        species(plegadis_chihi).
+      genus(platalea).
+        species(platalea_ajaja).
+*/
+
 order(pelecaniformes).
 
 family(pelecanidae).
@@ -36,9 +78,12 @@ species(falcinellus).
 species(chihi).
 species(ajaja).
 
+% Order
 hasParent(pelecanidae, pelecaniformes).
 hasParent(ardeidae, pelecaniformes).
 hasParent(threskiornthdae, pelecaniformes).
+
+% Family
 hasParent(pelecanus, pelecanidae).
 hasParent(botaurus, ardeidae).
 hasParent(ixobrychus, ardeidae).
@@ -51,6 +96,8 @@ hasParent(nyctanassa, ardeidae).
 hasParent(eudocimus, threskiornthdae).
 hasParent(plegadis, threskiornthdae).
 hasParent(platalea, threskiornthdae).
+
+% Genus
 hasParent(erythrorhynchos, pelecanus).
 hasParent(occidentalis, pelecanus).
 hasParent(lentiginosus, botaurus).
@@ -69,6 +116,7 @@ hasParent(albus, eudocimus).
 hasParent(falcinellus, plegadis).
 hasParent(chihi, plegadis).
 hasParent(ajaja, platalea).
+
 
 hasCommonName(pelecanus, pelican).
 hasCommonName(pelecanusErythrorhynchos, americanWhitePelican).
