@@ -119,7 +119,7 @@ hasParent(ajaja, platalea).
 
 % hasSpeciesParent
 % Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
-% but isAStrict ONLY takes compound names)
+% but isaStrict ONLY takes compound names)
 % Order
 hasCompoundParent(pelecanidae, pelecaniformes).
 hasCompoundParent(ardeidae, pelecaniformes).
@@ -135,15 +135,15 @@ hasCompoundParent(bubulcus, ardeidae).
 hasCompoundParent(butorides, ardeidae).
 hasCompoundParent(nycticorax, ardeidae).
 hasCompoundParent(nyctanassa, ardeidae).
-hasCompoundParent(eudocimus, threskiornthdae).
-hasCompoundParent(plegadis, threskiornthdae).
-hasCompoundParent(platalea, threskiornthdae).
+hasCompoundParent(eudocimus, threskiornithdae).
+hasCompoundParent(plegadis, threskiornithdae).
+hasCompoundParent(platalea, threskiornithdae).
 
 % Species
 hasCompoundParent(pelecanus_erythrorhynchos, pelecanus).
 hasCompoundParent(pelecanus_occidentalis, pelecanus).
 hasCompoundParent(botaurus_lentiginosus, botaurus).
-hasCompoundParent(ixobrychus_exilis, exilis).
+hasCompoundParent(ixobrychus_exilis, ixobrychus).
 hasCompoundParent(ardea_herodias, ardea).
 hasCompoundParent(ardea_alba, ardea).
 hasCompoundParent(egretta_thula, egretta).
@@ -235,8 +235,9 @@ hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = 
 hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N).
 hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
-isAStrict(A, B) :- hasCompoundParent(A,B).
-isAStrict(A, B) :- hasCompoundParent(A,X) , isAStrict(X,B).
+isaStrict(A, B) :- hasCompoundParent(A,B).
+isaStrict(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
+isaStrict(A, A).
 
 isa(A, B) :- hasParent(A, B).
 isa(A, B) :- hasParent(A, C), hasParent(C, B).
