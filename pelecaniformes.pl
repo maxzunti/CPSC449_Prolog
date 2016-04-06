@@ -44,7 +44,7 @@ order(pelecaniformes).
 
 family(pelecanidae).
 family(ardeidae).
-family(threskiornthdae).
+family(threskiornithdae).
 
 genus(pelecanus).
 genus(botaurus).
@@ -65,7 +65,7 @@ species(lentiginosus).
 species(exilis).
 species(herodias).
 species(alba).
-species(thulaegretta).
+species(thula).
 species(caerulea).
 species(tricolor).
 species(rufescens).
@@ -104,7 +104,7 @@ hasParent(lentiginosus, botaurus).
 hasParent(exilis, ixobrychus).
 hasParent(herodias, ardea).
 hasParent(alba, ardea).
-hasParent(thulaegretta, egretta).
+hasParent(thula, egretta).
 hasParent(caerulea, egretta).
 hasParent(tricolor, egretta).
 hasParent(rufescens, egretta).
@@ -174,7 +174,7 @@ hasCommonName(botaurus, lentiginosus, americanBittern).
 hasCommonName(ixobrychus, exilis, leastBittern).
 hasCommonName(ardea, herodias, greatBlueHeron).
 hasCommonName(ardea, alba, greatEgret).
-hasCommonName(egretta, thulaegretta, snowyEgret).
+hasCommonName(egretta, thula, snowyEgret).
 hasCommonName(egretta, caerulea, littleBlueHeron).
 hasCommonName(egretta, tricolor, tricoloredHeron).
 hasCommonName(egretta, rufescens, reddishEgret).
