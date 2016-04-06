@@ -117,9 +117,9 @@ hasParent(falcinellus, plegadis).
 hasParent(chihi, plegadis).
 hasParent(ajaja, platalea).
 
-% hasSpeciesParent
+% hasCompoundParent
 % Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
-% but isaStrict ONLY takes compound names)
+% but isAStrict/isa ONLY take compound names)
 % Order
 hasCompoundParent(pelecanidae, pelecaniformes).
 hasCompoundParent(ardeidae, pelecaniformes).
@@ -208,8 +208,8 @@ hasCommonName(plegadis_chihi, whiteFacedIbis).
 hasCommonName(falcinellus, glossyIbis).
 hasCommonName(chihi, whiteFacedIbis).
 hasCommonName(platalea, spoonbill).
-hasCommonName(platalea_ajaja, roeateSpoonbill).
-hasCommonName(ajaja, roeateSpoonbill).
+hasCommonName(platalea_ajaja, roseateSpoonbill).
+hasCommonName(ajaja, roiseateSpoonbill).
 
 hasCommonName(pelecanus, erythrorhynchos, americanWhitePelican).
 hasCommonName(pelecanus, occidentalis, brownPelican).
@@ -239,10 +239,11 @@ isaStrict(A, B) :- hasCompoundParent(A,B).
 isaStrict(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
 isaStrict(A, A).
 
-isa(A, B) :- hasParent(A, B).
-isa(A, B) :- hasParent(A, C), hasParent(C, B).
-isa(A, B) :- hasParent(A, C), hasParent(C, D), hasParent(D, B).
-isa(A, A).
+isa(A, B) :- isaStrict(A, B).
+%isa(A, B) :- isaStrict(A, B), !, fail.
+isa(A, B) :- hasCommonName(X, A) , isaStrict(X, B).
+isa(A, B) :- hasCommonName(Y, B) , isaStrict(A, Y).
+isa(A, B) :- hasCommonName(X, A), hasCommonName(Y, B), isaStrict(X, Y).
 
 
 synonym(A, B) :- \+(A = B), hasCommonName(B, A).                    %A is a common name of scientific name B
