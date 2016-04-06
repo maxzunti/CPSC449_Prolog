@@ -117,7 +117,50 @@ hasParent(falcinellus, plegadis).
 hasParent(chihi, plegadis).
 hasParent(ajaja, platalea).
 
+% hasSpeciesParent
+% Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
+% but isAStrict ONLY takes compound names)
+% Order
+hasCompoundParent(pelecanidae, pelecaniformes).
+hasCompoundParent(ardeidae, pelecaniformes).
+hasCompoundParent(threskiornthdae, pelecaniformes).
 
+% Family
+hasCompoundParent(pelecanus, pelecanidae).
+hasCompoundParent(botaurus, ardeidae).
+hasCompoundParent(ixobrychus, ardeidae).
+hasCompoundParent(ardea, ardeidae).
+hasCompoundParent(egretta, ardeidae).
+hasCompoundParent(bubulcus, ardeidae).
+hasCompoundParent(butorides, ardeidae).
+hasCompoundParent(nycticorax, ardeidae).
+hasCompoundParent(nyctanassa, ardeidae).
+hasCompoundParent(eudocimus, threskiornthdae).
+hasCompoundParent(plegadis, threskiornthdae).
+hasCompoundParent(platalea, threskiornthdae).
+
+% Species
+hasCompoundParent(pelecanus_erythrorhynchos, pelecanus).
+hasCompoundParent(pelecanus_occidentalis, pelecanus).
+hasCompoundParent(botaurus_lentiginosus, botaurus).
+hasCompoundParent(ixobrychus_exilis, exilis).
+hasCompoundParent(ardea_herodias, ardea).
+hasCompoundParent(ardea_alba, ardea).
+hasCompoundParent(egretta_thula, egretta).
+hasCompoundParent(egretta_caerulea, egretta).
+hasCompoundParent(egretta_tricolor, egretta).
+hasCompoundParent(egretta_rufescens, egretta).
+hasCompoundParent(bubulcus_ibis, bubulcus).
+hasCompoundParent(butorides_virescens, butorides).
+hasCompoundParent(nycticorax_nycticorax, nycticorax).
+hasCompoundParent(nyctanassa_violacea, nyctanassa).
+hasCompoundParent(eudocimus_albus, eudocimus).
+hasCompoundParent(plegadis_falcinellus, plegadis).
+hasCompoundParent(plegadis_chihi, plegadis).
+hasCompoundParent(platalea_ajaja, platalea).
+
+
+% hasCommonName
 hasCommonName(pelecanus, pelican).
 hasCommonName(pelecanus_erythrorhynchos, americanWhitePelican).
 hasCommonName(pelecanus_occidentalis, brownPelican).
@@ -192,15 +235,14 @@ hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = 
 hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N).
 hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
+isAStrict(A, B) :- hasCompoundParent(A,B).
+isAStrict(A, B) :- hasCompoundParent(A,X) , isAStrict(X,B).
+
 isa(A, B) :- hasParent(A, B).
 isa(A, B) :- hasParent(A, C), hasParent(C, B).
 isa(A, B) :- hasParent(A, C), hasParent(C, D), hasParent(D, B).
 isa(A, A).
 
-isaStrict(A, B) :- hasParent(A, B).
-isaStrict(A, B) :- hasParent(A, C), hasParent(C, B).
-isaStrict(A, B) :- hasParent(A, C), hasParent(C, D), hasParent(D, B).
-isaStrict(A, A).
 
 synonym(A, B) :- \+(A = B), hasCommonName(B, A).                    %A is a common name of scientific name B
 synonym(A, B) :- \+(A = B), hasCommonName(A, B).
