@@ -282,5 +282,24 @@ countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
 %nesting(A, B).
 
 %behavior(A, B).
+behavior(pelecanus_erythrorhynchos,surfaceDive).
+behavior(pelecanus_occidentalis,aerialDive).
+behavior(botaurus_lentiginosus,stalking).
+behavior(ixobrychus_exilis,stalking).
+behavior(ardea_herodias, stalking).
+behavior(ardea_alba, stalking).
+behavior(egretta_thula, stalking).
+behavior(egretta_caerulea, stalking).
+behavior(egretta_tricolor, stalking).
+behavior(egretta_rufescens, stalking).
+behavior(bubulcus_ibis, surfaceDive).
+behavior(butorides_virescens, stalking).
+behavior(nycticorax_nycticorax, stalking).
+behavior(nyctanassa_violacea, stalking).
+behavior(eudocimus_albus, surfaceDive).
+behavior(plegadis_falcinellus, surfaceDive).
+behavior(plegadis_chihi, probing).
+behavior(platalea_ajaja, groundForager).
+behavior(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), behavior(C,B).
 
 %conservation(A, B).
