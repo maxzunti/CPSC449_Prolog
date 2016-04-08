@@ -232,6 +232,18 @@ habitat(plegadis_chihi, marsh).
 habitat(platalea_ajaja, marsh).
 habitat(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), habitat(C,B).
 
+rangesTo(pelecanus_erythrorhynchos,canada).
+rangesTo(pelecanus_erythrorhynchos,alberta).
+rangesTo(botaurus_lentiginosus,canada).
+rangesTo(botaurus_lentiginosus,alberta).
+rangesTo(ardea_herodias, canada).
+rangesTo(ardea_herodias, alberta).
+rangesTo(ardea_alba, canada).
+rangesTo(bubulcus_ibis, canada).
+rangesTo(butorides_virescens, canada).
+rangesTo(nycticorax_nycticorax, canada).
+rangesTo(nycticorax_nycticorax, alberta).
+rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
 
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
@@ -258,8 +270,6 @@ countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
 %countSpecies(A, N) :- species(X), isaStrict(X, A), countSpecies(A, N), N is N+1.
 
 %rangesTo(A, P).
-
-
 
 %food(A, B).
 
