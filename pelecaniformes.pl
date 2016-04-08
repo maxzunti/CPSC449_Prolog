@@ -245,6 +245,7 @@ rangesTo(nycticorax_nycticorax, canada).
 rangesTo(nycticorax_nycticorax, alberta).
 rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
 
+
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
 hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
@@ -255,7 +256,7 @@ isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B).
 isaStrict(A, A).
 
 isa(A, B) :- isaHelper(A, B).
-% Use nonvar to determine whether or not we're querying with variables and thus should return anything
+% Use nonvar to determine whether or not were querying with variables and thus should return anything
 isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
 isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
 isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
@@ -265,9 +266,9 @@ isaHelper(A, B) :- hasParent2(A,B).
 isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
 isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
 
-
-synonym(A, B) :- \+(A = B), hasCommonName(B, A); hasCommonName(A, B).
-synonym(A, B) :- \+(A = B), hasCommonName(C, A), hasCommonName(C, B).
+synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common name of scientific name B
+synonym(A, B) :- hasCommonName(A, B), A \= B.
+synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 
 countSpecies(A, N) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(G, S, A), N = 0.
 countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
@@ -279,7 +280,7 @@ countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
 %food(A, B).
 
 %nesting(A, B).
-          
+
 %behavior(A, B).
 
 %conservation(A, B).
