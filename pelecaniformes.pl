@@ -245,6 +245,65 @@ rangesTo(nycticorax_nycticorax, canada).
 rangesTo(nycticorax_nycticorax, alberta).
 rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
 
+food(pelecanus_erythrorhynchos,fish).
+food(pelecanus_occidentalis,fish).
+food(botaurus_lentiginosus,fish).
+food(ixobrychus_exilis,fish).
+food(ardea_herodias, fish).
+food(ardea_alba, fish).
+food(egretta_thula, fish).
+food(egretta_caerulea, fish).
+food(egretta_tricolor, fish).
+food(egretta_rufescens, fish).
+food(bubulcus_ibis, insects).
+food(butorides_virescens, fish).
+food(nycticorax_nycticorax, fish).
+food(nyctanassa_violacea, insects).
+food(eudocimus_albus, insects).
+food(plegadis_falcinellus, insects).
+food(plegadis_chihi, insects).
+food(platalea_ajaja, fish).
+food(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), food(C,B).
+
+nesting(pelecanus_erythrorhynchos,ground).
+nesting(pelecanus_occidentalis,tree).
+nesting(botaurus_lentiginosus,ground).
+nesting(ixobrychus_exilis,ground).
+nesting(ardea_herodias, tree).
+nesting(ardea_alba, tree).
+nesting(egretta_thula, tree).
+nesting(egretta_caerulea, tree).
+nesting(egretta_tricolor, tree).
+nesting(egretta_rufescens, tree).
+nesting(bubulcus_ibis, tree).
+nesting(butorides_virescens, tree).
+nesting(nycticorax_nycticorax, tree).
+nesting(nyctanassa_violacea, tree).
+nesting(eudocimus_albus, tree).
+nesting(plegadis_falcinellus, ground).
+nesting(plegadis_chihi, ground).
+nesting(platalea_ajaja, tree).
+nesting(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), nesting(C,B).
+
+conservation(pelecanus_erythrorhynchos,lc).
+conservation(pelecanus_occidentalis,lc).
+conservation(botaurus_lentiginosus,lc).
+conservation(ixobrychus_exilis,lc).
+conservation(ardea_herodias, lc).
+conservation(ardea_alba, lc).
+conservation(egretta_thula, lc).
+conservation(egretta_caerulea, lc).
+conservation(egretta_tricolor, lc).
+conservation(egretta_rufescens, nt).
+conservation(bubulcus_ibis, lc).
+conservation(butorides_virescens, lc).
+conservation(nycticorax_nycticorax, lc).
+conservation(nyctanassa_violacea, lc).
+conservation(eudocimus_albus, lc).
+conservation(plegadis_falcinellus, lc).
+conservation(plegadis_chihi, lc).
+conservation(platalea_ajaja, lc).
+conservation(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), conservation(C,B).
 
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
