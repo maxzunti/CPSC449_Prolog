@@ -254,11 +254,16 @@ isaStrict(A, B) :- hasParent2(A,B).
 isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B).
 isaStrict(A, A).
 
-isa(A, B) :- isaStrict(A, B).
-%isa(A, B) :- isaStrict(A, B), !, fail.
-isa(A, B) :- hasCommonName(X, A) , isaStrict(X, B).
-isa(A, B) :- hasCommonName(Y, B) , isaStrict(A, Y).
-isa(A, B) :- hasCommonName(X, A), hasCommonName(Y, B), isaStrict(X, Y).
+isa(A, B) :- isaHelper(A, B).
+% Use nonvar to determine whether or not we're querying with variables and thus should return anything
+isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
+isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
+isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
+
+% Like isaStrict, but with more specific rules for self-matching
+isaHelper(A, B) :- hasParent2(A,B).
+isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
+isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
 
 
 synonym(A, B) :- \+(A = B), hasCommonName(B, A); hasCommonName(A, B).
