@@ -81,7 +81,7 @@ species(ajaja).
 % Order
 hasParent(pelecanidae, pelecaniformes).
 hasParent(ardeidae, pelecaniformes).
-hasParent(threskiornthdae, pelecaniformes).
+hasParent(threskiornithdae, pelecaniformes).
 
 % Family
 hasParent(pelecanus, pelecanidae).
@@ -93,9 +93,9 @@ hasParent(bubulcus, ardeidae).
 hasParent(butorides, ardeidae).
 hasParent(nycticorax, ardeidae).
 hasParent(nyctanassa, ardeidae).
-hasParent(eudocimus, threskiornthdae).
-hasParent(plegadis, threskiornthdae).
-hasParent(platalea, threskiornthdae).
+hasParent(eudocimus, threskiornithdae).
+hasParent(plegadis, threskiornithdae).
+hasParent(platalea, threskiornithdae).
 
 % Genus
 hasParent(erythrorhynchos, pelecanus).
@@ -117,47 +117,47 @@ hasParent(falcinellus, plegadis).
 hasParent(chihi, plegadis).
 hasParent(ajaja, platalea).
 
-% hasCompoundParent
+% hasParent2
 % Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
 % but isAStrict/isa ONLY take compound names)
 % Order
-hasCompoundParent(pelecanidae, pelecaniformes).
-hasCompoundParent(ardeidae, pelecaniformes).
-hasCompoundParent(threskiornthdae, pelecaniformes).
+hasParent2(pelecanidae, pelecaniformes).
+hasParent2(ardeidae, pelecaniformes).
+hasParent2(threskiornithdae, pelecaniformes).
 
 % Family
-hasCompoundParent(pelecanus, pelecanidae).
-hasCompoundParent(botaurus, ardeidae).
-hasCompoundParent(ixobrychus, ardeidae).
-hasCompoundParent(ardea, ardeidae).
-hasCompoundParent(egretta, ardeidae).
-hasCompoundParent(bubulcus, ardeidae).
-hasCompoundParent(butorides, ardeidae).
-hasCompoundParent(nycticorax, ardeidae).
-hasCompoundParent(nyctanassa, ardeidae).
-hasCompoundParent(eudocimus, threskiornithdae).
-hasCompoundParent(plegadis, threskiornithdae).
-hasCompoundParent(platalea, threskiornithdae).
+hasParent2(pelecanus, pelecanidae).
+hasParent2(botaurus, ardeidae).
+hasParent2(ixobrychus, ardeidae).
+hasParent2(ardea, ardeidae).
+hasParent2(egretta, ardeidae).
+hasParent2(bubulcus, ardeidae).
+hasParent2(butorides, ardeidae).
+hasParent2(nycticorax, ardeidae).
+hasParent2(nyctanassa, ardeidae).
+hasParent2(eudocimus, threskiornithdae).
+hasParent2(plegadis, threskiornithdae).
+hasParent2(platalea, threskiornithdae).
 
 % Species
-hasCompoundParent(pelecanus_erythrorhynchos, pelecanus).
-hasCompoundParent(pelecanus_occidentalis, pelecanus).
-hasCompoundParent(botaurus_lentiginosus, botaurus).
-hasCompoundParent(ixobrychus_exilis, ixobrychus).
-hasCompoundParent(ardea_herodias, ardea).
-hasCompoundParent(ardea_alba, ardea).
-hasCompoundParent(egretta_thula, egretta).
-hasCompoundParent(egretta_caerulea, egretta).
-hasCompoundParent(egretta_tricolor, egretta).
-hasCompoundParent(egretta_rufescens, egretta).
-hasCompoundParent(bubulcus_ibis, bubulcus).
-hasCompoundParent(butorides_virescens, butorides).
-hasCompoundParent(nycticorax_nycticorax, nycticorax).
-hasCompoundParent(nyctanassa_violacea, nyctanassa).
-hasCompoundParent(eudocimus_albus, eudocimus).
-hasCompoundParent(plegadis_falcinellus, plegadis).
-hasCompoundParent(plegadis_chihi, plegadis).
-hasCompoundParent(platalea_ajaja, platalea).
+hasParent2(pelecanus_erythrorhynchos, pelecanus).
+hasParent2(pelecanus_occidentalis, pelecanus).
+hasParent2(botaurus_lentiginosus, botaurus).
+hasParent2(ixobrychus_exilis, ixobrychus).
+hasParent2(ardea_herodias, ardea).
+hasParent2(ardea_alba, ardea).
+hasParent2(egretta_thula, egretta).
+hasParent2(egretta_caerulea, egretta).
+hasParent2(egretta_tricolor, egretta).
+hasParent2(egretta_rufescens, egretta).
+hasParent2(bubulcus_ibis, bubulcus).
+hasParent2(butorides_virescens, butorides).
+hasParent2(nycticorax_nycticorax, nycticorax).
+hasParent2(nyctanassa_violacea, nyctanassa).
+hasParent2(eudocimus_albus, eudocimus).
+hasParent2(plegadis_falcinellus, plegadis).
+hasParent2(plegadis_chihi, plegadis).
+hasParent2(platalea_ajaja, platalea).
 
 
 % hasCommonName
@@ -212,25 +212,51 @@ hasCommonName(plegadis, falcinellus, glossyIbis).
 hasCommonName(plegadis, chihi, whiteFacedIbis).
 hasCommonName(platalea, ajaja, roseateSpoonbill).
 
+habitat(pelecanus_erythrorhynchos,lakePond).
+habitat(pelecanus_occidentalis,ocean).
+habitat(botaurus_lentiginosus,marsh).
+habitat(ixobrychus_exilis,marsh).
+habitat(ardea_herodias, marsh).
+habitat(ardea_alba, marsh).
+habitat(egretta_thula, marsh).
+habitat(egretta_caerulea, marsh).
+habitat(egretta_tricolor, marsh).
+habitat(egretta_rufescens, marsh).
+habitat(bubulcus_ibis, marsh).
+habitat(butorides_virescens, marsh).
+habitat(nycticorax_nycticorax, marsh).
+habitat(nyctanassa_violacea, marsh).
+habitat(eudocimus_albus, marsh).
+habitat(plegadis_falcinellus, marsh).
+habitat(plegadis_chihi, marsh).
+habitat(platalea_ajaja, marsh).
+habitat(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), habitat(C,B).
+
+
+
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
 hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
 hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
-isaStrict(A, B) :- hasCompoundParent(A,B).
-isaStrict(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
+isaStrict(A, B) :- hasParent2(A,B).
+isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B).
 isaStrict(A, A).
 
-isa(A, B) :- isaStrict(A, B).
-%isa(A, B) :- isaStrict(A, B), !, fail.
-isa(A, B) :- hasCommonName(X, A) , isaStrict(X, B).
-isa(A, B) :- hasCommonName(Y, B) , isaStrict(A, Y).
-isa(A, B) :- hasCommonName(X, A), hasCommonName(Y, B), isaStrict(X, Y).
+isa(A, B) :- isaHelper(A, B).
+% Use nonvar to determine whether or not were querying with variables and thus should return anything
+isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
+isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
+isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
+
+% Like isaStrict, but with more specific rules for self-matching
+isaHelper(A, B) :- hasParent2(A,B).
+isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
+isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
 
 synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common name of scientific name B
 synonym(A, B) :- hasCommonName(A, B), A \= B.
 synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
-
 
 countSpecies(A, N) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(G, S, A), N = 0.
 countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
@@ -239,7 +265,7 @@ countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
 
 %rangesTo(A, P).
 
-%habitat(A, B) :- hasCompoundName(_,S,A), .
+
 
 %food(A, B).
 
