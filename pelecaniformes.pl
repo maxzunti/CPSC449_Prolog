@@ -123,7 +123,7 @@ hasParent(ajaja, platalea).
 % Order
 hasCompoundParent(pelecanidae, pelecaniformes).
 hasCompoundParent(ardeidae, pelecaniformes).
-hasCompoundParent(threskiornthdae, pelecaniformes).
+hasCompoundParent(threskiornithdae, pelecaniformes).
 
 % Family
 hasCompoundParent(pelecanus, pelecanidae).
@@ -264,11 +264,16 @@ isaStrict(A, B) :- hasCompoundParent(A,B).
 isaStrict(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
 isaStrict(A, A).
 
-isa(A, B) :- isaStrict(A, B).
-%isa(A, B) :- isaStrict(A, B), !, fail.
-isa(A, B) :- hasCommonName(X, A) , isaStrict(X, B).
-isa(A, B) :- hasCommonName(Y, B) , isaStrict(A, Y).
-isa(A, B) :- hasCommonName(X, A), hasCommonName(Y, B), isaStrict(X, Y).
+isa(A, B) :- isaHelper(A, B).
+% Use nonvar to determine whether or not we're querying with variables and thus should return anything
+isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
+isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
+isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
+
+% Like isaStrict, but with more specific rules for self-matching
+isaHelper(A, B) :- hasCompoundParent(A,B).
+isaHelper(A, B) :- hasCompoundParent(A,X) , isaStrict(X,B).
+isaHelper(A, A) :- order(A) ; family(A) ; hasCompoundParent(A, X) ; (var(A) , hasCommonName(Y, A)).
 
 
 synonym(A, B) :- \+(A = B), hasCommonName(B, A).                    %A is a common name of scientific name B
