@@ -351,10 +351,10 @@ synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 
 countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).
 countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).
-countSpecies(A, N) :- Counter is 0, countSpeciesHelper(A, N, Counter), N is Counter. 
+countSpecies(A, N) :- NS is 0, countSpeciesHelper(A, NS, Counter), N is Counter. 
 %countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpecies(C, 1), N is NS+1, countSpecies(C, NS).
 
-countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N + 1.
-countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), N is Counter, countSpeciesHelper(C, N, Counter), N is Counter.
-
+%countSpeciesHelper(A, N, Counter) :- .
+countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N+1.
+countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpeciesHelper(C, N, Counter).
 
