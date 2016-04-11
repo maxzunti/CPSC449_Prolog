@@ -285,6 +285,26 @@ nesting(plegadis_chihi, ground).
 nesting(platalea_ajaja, tree).
 nesting(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), nesting(C,B).
 
+behavior(pelecanus_erythrorhynchos,surfaceDive).
+behavior(pelecanus_occidentalis,aerialDive).
+behavior(botaurus_lentiginosus,stalking).
+behavior(ixobrychus_exilis,stalking).
+behavior(ardea_herodias, stalking).
+behavior(ardea_alba, stalking).
+behavior(egretta_thula, stalking).
+behavior(egretta_caerulea, stalking).
+behavior(egretta_tricolor, stalking).
+behavior(egretta_rufescens, stalking).
+behavior(bubulcus_ibis, surfaceDive).
+behavior(butorides_virescens, stalking).
+behavior(nycticorax_nycticorax, stalking).
+behavior(nyctanassa_violacea, stalking).
+behavior(eudocimus_albus, surfaceDive).
+behavior(plegadis_falcinellus, surfaceDive).
+behavior(plegadis_chihi, probing).
+behavior(platalea_ajaja, groundForager).
+behavior(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), behavior(C,B).
+
 conservation(pelecanus_erythrorhynchos,lc).
 conservation(pelecanus_occidentalis,lc).
 conservation(botaurus_lentiginosus,lc).
@@ -312,7 +332,7 @@ hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
 isaStrict(A, B) :- hasParent2(A,B).
 isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B).
-isaStrict(A, A).
+isaStrict(A, A) :- hasParent2(A,_).
 
 isa(A, B) :- isaHelper(A, B).
 % Use nonvar to determine whether or not were querying with variables and thus should return anything
@@ -329,36 +349,12 @@ synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common 
 synonym(A, B) :- hasCommonName(A, B), A \= B.
 synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 
-countSpecies(A, N) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(G, S, A), N = 0.
-countSpecies(A, N) :- hasCompoundName(_, S, A), species(S), N = 1.
-%countSpecies(A, N) :- N = 0.
-%countSpecies(A, N) :- species(X), isaStrict(X, A), countSpecies(A, N), N is N+1.
+countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).
+countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).
+countSpecies(A, N) :- Counter is 0, countSpeciesHelper(A, N, Counter), N is Counter. 
+%countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpecies(C, 1), N is NS+1, countSpecies(C, NS).
 
-%rangesTo(A, P).
+countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N + 1.
+countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), N is Counter, countSpeciesHelper(C, N, Counter), N is Counter.
 
-%food(A, B).
 
-%nesting(A, B).
-
-%behavior(A, B).
-behavior(pelecanus_erythrorhynchos,surfaceDive).
-behavior(pelecanus_occidentalis,aerialDive).
-behavior(botaurus_lentiginosus,stalking).
-behavior(ixobrychus_exilis,stalking).
-behavior(ardea_herodias, stalking).
-behavior(ardea_alba, stalking).
-behavior(egretta_thula, stalking).
-behavior(egretta_caerulea, stalking).
-behavior(egretta_tricolor, stalking).
-behavior(egretta_rufescens, stalking).
-behavior(bubulcus_ibis, surfaceDive).
-behavior(butorides_virescens, stalking).
-behavior(nycticorax_nycticorax, stalking).
-behavior(nyctanassa_violacea, stalking).
-behavior(eudocimus_albus, surfaceDive).
-behavior(plegadis_falcinellus, surfaceDive).
-behavior(plegadis_chihi, probing).
-behavior(platalea_ajaja, groundForager).
-behavior(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), behavior(C,B).
-
-%conservation(A, B).
