@@ -120,12 +120,12 @@ hasParent(ajaja, platalea).
 % hasParent2
 % Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
 % but isAStrict/isa ONLY take compound names)
-% Order
+% Family
 hasParent2(pelecanidae, pelecaniformes).
 hasParent2(ardeidae, pelecaniformes).
 hasParent2(threskiornithdae, pelecaniformes).
 
-% Family
+% Genus
 hasParent2(pelecanus, pelecanidae).
 hasParent2(botaurus, ardeidae).
 hasParent2(ixobrychus, ardeidae).
@@ -331,8 +331,8 @@ hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
 hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 
 isaStrict(A, B) :- hasParent2(A,B).
-isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B).
 isaStrict(A, A) :- hasParent2(A,_).
+isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).
 
 isa(A, B) :- isaHelper(A, B).
 % Use nonvar to determine whether or not were querying with variables and thus should return anything
@@ -351,10 +351,15 @@ synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 
 countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).
 countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).
-countSpecies(A, N) :- NS is 0, countSpeciesHelper(A, NS, Counter), N is Counter. 
-%countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpecies(C, 1), N is NS+1, countSpecies(C, NS).
+%countSpecies(A, N) :- NS is 0, countSpeciesHelper(A, NS, Counter), N is Counter.
+% countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S),countSpecies(C, NS).
 
-%countSpeciesHelper(A, N, Counter) :- .
-countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N+1.
-countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpeciesHelper(C, N, Counter).
+% countSpeciesHelper(A, N, Counter) :- .
+%countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N+1.
+%countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpeciesHelper(C, N, Counter).
 
+test(A, C) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A).
+
+
+countExample(A, N, List) :- hasCompoundName(_, S, A), species(S), append(List, [S], List1), length(List1, N).
+countExample(A, N, List) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countExample(C, N, List).
