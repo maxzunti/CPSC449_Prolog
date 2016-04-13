@@ -352,34 +352,5 @@ synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).
 countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).
 countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), makeList(A, List), length(List, N).
-
-
-makeList(A, List) :- isaStrict(C, A), hasCompoundName(_, S, C), species(S), makeList2(A, C, List).
-%makeList(A, List).
-
-makeList2(A, S, List) :- \+member(S,List), append(List, [S], List1), makeList(A, List1).
-
-
-
-
-
-
-
-
-
-
-%countExample(A, N, List) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countExample(C, N, List).
-
-
-
-
-
-%countSpecies(A, N) :- NS is 0, countSpeciesHelper(A, NS, Counter), N is Counter.
-%countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S),countSpecies(C, NS).
-
-% countSpeciesHelper(A, N, Counter) :- .
-%countSpeciesHelper(A, N, Counter) :- hasCompoundName(_, S, A), species(S), Counter is N+1.
-%countSpeciesHelper(A, N, Counter) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A), hasCompoundName(_,S,C), species(S), countSpeciesHelper(C, N, Counter).
-
-%test(A, C) :- atom(A), (order(A) ; family(A) ; genus(A)), isaStrict(C, A).
-
+makeList(A, List) :- findall(species(X), makeListGoal(A,X), List ).
+makeListGoal(A, S) :-  isaStrict(C, A), hasCompoundName(_, S, C), species(S).
