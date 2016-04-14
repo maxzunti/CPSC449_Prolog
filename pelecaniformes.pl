@@ -1,4 +1,4 @@
-/* 
+/*
  * CPSC 449 - Prolog Assignment
  * Group Members: Steven Vi, Philip Chow-Wah, Matthew Hylton, Max Zunti
 */
@@ -272,6 +272,7 @@ rangesTo(bubulcus_ibis, canada).
 rangesTo(butorides_virescens, canada).
 rangesTo(nycticorax_nycticorax, canada).
 rangesTo(nycticorax_nycticorax, alberta).
+%If A is a genus, family, or order, then return the species under A range
 rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
 
 %%%%%%%%%% habitat %%%%%%%%%%
@@ -293,6 +294,7 @@ habitat(eudocimus_albus, marsh).
 habitat(plegadis_falcinellus, marsh).
 habitat(plegadis_chihi, marsh).
 habitat(platalea_ajaja, marsh).
+%If A is a genus, family, or order, then return the species under A habitat
 habitat(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), habitat(C,B).
 
 %%%%%%%%%% food %%%%%%%%%%
@@ -314,6 +316,7 @@ food(eudocimus_albus, insects).
 food(plegadis_falcinellus, insects).
 food(plegadis_chihi, insects).
 food(platalea_ajaja, fish).
+%If A is a genus, family, or order, then return the species under A food
 food(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), food(C,B).
 
 %%%%%%%%%% nesting %%%%%%%%%%
@@ -335,6 +338,7 @@ nesting(eudocimus_albus, tree).
 nesting(plegadis_falcinellus, ground).
 nesting(plegadis_chihi, ground).
 nesting(platalea_ajaja, tree).
+%If A is a genus, family, or order, then return the species under A nesting
 nesting(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), nesting(C,B).
 
 %%%%%%%%%% behavior %%%%%%%%%%
@@ -356,6 +360,7 @@ behavior(eudocimus_albus, surfaceDive).
 behavior(plegadis_falcinellus, surfaceDive).
 behavior(plegadis_chihi, probing).
 behavior(platalea_ajaja, groundForager).
+%If A is a genus, family, or order, then return the species under A behavior
 behavior(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), behavior(C,B).
 
 %%%%%%%%%% conservation %%%%%%%%%%
@@ -377,4 +382,5 @@ conservation(eudocimus_albus, lc).
 conservation(plegadis_falcinellus, lc).
 conservation(plegadis_chihi, lc).
 conservation(platalea_ajaja, lc).
+%If A is a genus, family, or order, then return the species under A conservation
 conservation(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), conservation(C,B).
