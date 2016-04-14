@@ -78,12 +78,14 @@ species(falcinellus).
 species(chihi).
 species(ajaja).
 
-% Order
+%%%%%%%%%% HasParent %%%%%%%%%%
+
+% Parents of family
 hasParent(pelecanidae, pelecaniformes).
 hasParent(ardeidae, pelecaniformes).
 hasParent(threskiornithdae, pelecaniformes).
 
-% Family
+% Parents of genus
 hasParent(pelecanus, pelecanidae).
 hasParent(botaurus, ardeidae).
 hasParent(ixobrychus, ardeidae).
@@ -97,7 +99,7 @@ hasParent(eudocimus, threskiornithdae).
 hasParent(plegadis, threskiornithdae).
 hasParent(platalea, threskiornithdae).
 
-% Genus
+% Parents of Species
 hasParent(erythrorhynchos, pelecanus).
 hasParent(occidentalis, pelecanus).
 hasParent(lentiginosus, botaurus).
@@ -117,15 +119,16 @@ hasParent(falcinellus, plegadis).
 hasParent(chihi, plegadis).
 hasParent(ajaja, platalea).
 
-% hasParent2
+%%%%%%%%%% HasParent 2 %%%%%%%%%%
 % Like hasParent, but only accepts compound names (since hasParent ONLY takes raw names
 % but isAStrict/isa ONLY take compound names)
-% Family
+
+% Parents of family
 hasParent2(pelecanidae, pelecaniformes).
 hasParent2(ardeidae, pelecaniformes).
 hasParent2(threskiornithdae, pelecaniformes).
 
-% Genus
+% Parents of genus
 hasParent2(pelecanus, pelecanidae).
 hasParent2(botaurus, ardeidae).
 hasParent2(ixobrychus, ardeidae).
@@ -139,7 +142,7 @@ hasParent2(eudocimus, threskiornithdae).
 hasParent2(plegadis, threskiornithdae).
 hasParent2(platalea, threskiornithdae).
 
-% Species
+% Parents of species
 hasParent2(pelecanus_erythrorhynchos, pelecanus).
 hasParent2(pelecanus_occidentalis, pelecanus).
 hasParent2(botaurus_lentiginosus, botaurus).
@@ -160,7 +163,7 @@ hasParent2(plegadis_chihi, plegadis).
 hasParent2(platalea_ajaja, platalea).
 
 
-% hasCommonName
+%%%%%%%%%% hasCommonName %%%%%%%%%%
 hasCommonName(pelecanus, pelican).
 hasCommonName(pelecanus_erythrorhynchos, americanWhitePelican).
 hasCommonName(pelecanus_occidentalis, brownPelican).
@@ -212,6 +215,57 @@ hasCommonName(plegadis, falcinellus, glossyIbis).
 hasCommonName(plegadis, chihi, whiteFacedIbis).
 hasCommonName(platalea, ajaja, roseateSpoonbill).
 
+%%%%%%%%%% hasSciName %%%%%%%%%%
+hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
+hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
+
+%%%%%%%%%% hasCompoundName %%%%%%%%%%
+hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
+
+%%%%%%%%%% isaStrict %%%%%%%%%%
+isaStrict(A, B) :- hasParent2(A,B).
+isaStrict(A, A) :- hasParent2(A,_).
+isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).
+
+%%%%%%%%%% isa %%%%%%%%%%
+isa(A, B) :- isaHelper(A, B).
+% Use nonvar to determine whether or not were querying with variables and thus should return anything
+isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
+isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
+isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
+
+% Like isaStrict, but with more specific rules for self-matching
+isaHelper(A, B) :- hasParent2(A,B).
+isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
+isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
+
+%%%%%%%%%% synonym %%%%%%%%%%
+synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common name of scientific name B
+synonym(A, B) :- hasCommonName(A, B), A \= B.
+synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
+
+%%%%%%%%%% countSpecies %%%%%%%%%%
+countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).                  %If A is some name that isn't order, family, genus, or compound species name, then N is 0.
+countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).                                           %If A is a species, then n is 1
+countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), makeList(A, List), length(List, N). %N is equal to the length of a list with all species who parents are A
+makeList(A, List) :- findall(species(X), makeListGoal(A,X), List ).                                   %make a list of all species who parents are A
+makeListGoal(A, S) :-  isaStrict(C, A), hasCompoundName(_, S, C), species(S).                         %Set goal for findAll, find all species that whos parents are A
+
+%%%%%%%%%% rangesTo %%%%%%%%%%
+rangesTo(pelecanus_erythrorhynchos,canada).
+rangesTo(pelecanus_erythrorhynchos,alberta).
+rangesTo(botaurus_lentiginosus,canada).
+rangesTo(botaurus_lentiginosus,alberta).
+rangesTo(ardea_herodias, canada).
+rangesTo(ardea_herodias, alberta).
+rangesTo(ardea_alba, canada).
+rangesTo(bubulcus_ibis, canada).
+rangesTo(butorides_virescens, canada).
+rangesTo(nycticorax_nycticorax, canada).
+rangesTo(nycticorax_nycticorax, alberta).
+rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
+
+%%%%%%%%%% habitat %%%%%%%%%%
 habitat(pelecanus_erythrorhynchos,lakePond).
 habitat(pelecanus_occidentalis,ocean).
 habitat(botaurus_lentiginosus,marsh).
@@ -232,19 +286,7 @@ habitat(plegadis_chihi, marsh).
 habitat(platalea_ajaja, marsh).
 habitat(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), habitat(C,B).
 
-rangesTo(pelecanus_erythrorhynchos,canada).
-rangesTo(pelecanus_erythrorhynchos,alberta).
-rangesTo(botaurus_lentiginosus,canada).
-rangesTo(botaurus_lentiginosus,alberta).
-rangesTo(ardea_herodias, canada).
-rangesTo(ardea_herodias, alberta).
-rangesTo(ardea_alba, canada).
-rangesTo(bubulcus_ibis, canada).
-rangesTo(butorides_virescens, canada).
-rangesTo(nycticorax_nycticorax, canada).
-rangesTo(nycticorax_nycticorax, alberta).
-rangesTo(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), rangesTo(C,B).
-
+%%%%%%%%%% food %%%%%%%%%%
 food(pelecanus_erythrorhynchos,fish).
 food(pelecanus_occidentalis,fish).
 food(botaurus_lentiginosus,fish).
@@ -265,6 +307,7 @@ food(plegadis_chihi, insects).
 food(platalea_ajaja, fish).
 food(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), food(C,B).
 
+%%%%%%%%%% nesting %%%%%%%%%%
 nesting(pelecanus_erythrorhynchos,ground).
 nesting(pelecanus_occidentalis,tree).
 nesting(botaurus_lentiginosus,ground).
@@ -285,6 +328,7 @@ nesting(plegadis_chihi, ground).
 nesting(platalea_ajaja, tree).
 nesting(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), nesting(C,B).
 
+%%%%%%%%%% behavior %%%%%%%%%%
 behavior(pelecanus_erythrorhynchos,surfaceDive).
 behavior(pelecanus_occidentalis,aerialDive).
 behavior(botaurus_lentiginosus,stalking).
@@ -305,6 +349,7 @@ behavior(plegadis_chihi, probing).
 behavior(platalea_ajaja, groundForager).
 behavior(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), behavior(C,B).
 
+%%%%%%%%%% conservation %%%%%%%%%%
 conservation(pelecanus_erythrorhynchos,lc).
 conservation(pelecanus_occidentalis,lc).
 conservation(botaurus_lentiginosus,lc).
@@ -324,33 +369,3 @@ conservation(plegadis_falcinellus, lc).
 conservation(plegadis_chihi, lc).
 conservation(platalea_ajaja, lc).
 conservation(A,B) :- atom(A), (order(A) ; family(A) ; genus(A)) , isaStrict(C,A), hasCompoundName(_,S,C), species(S), conservation(C,B).
-
-hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
-
-hasSciName(C, N) :- hasCommonName(N, C), hasCompoundName(X, Y, N), !.
-hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
-
-isaStrict(A, B) :- hasParent2(A,B).
-isaStrict(A, A) :- hasParent2(A,_).
-isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).
-
-isa(A, B) :- isaHelper(A, B).
-% Use nonvar to determine whether or not were querying with variables and thus should return anything
-isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
-isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
-isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
-
-% Like isaStrict, but with more specific rules for self-matching
-isaHelper(A, B) :- hasParent2(A,B).
-isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
-isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
-
-synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common name of scientific name B
-synonym(A, B) :- hasCommonName(A, B), A \= B.
-synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
-
-countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).
-countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).
-countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), makeList(A, List), length(List, N).
-makeList(A, List) :- findall(species(X), makeListGoal(A,X), List ).
-makeListGoal(A, S) :-  isaStrict(C, A), hasCompoundName(_, S, C), species(S).
