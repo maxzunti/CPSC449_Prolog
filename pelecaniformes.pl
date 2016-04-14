@@ -1,3 +1,8 @@
+/* 
+ * CPSC 449 - Prolog Assignment
+ * Group Members: Steven Vi, Philip Chow-Wah, Matthew Hylton, Max Zunti
+*/
+
 /*
 *** Logical taxonomy: ***
 
@@ -40,6 +45,7 @@ order(pelecaniformes).
         species(platalea_ajaja).
 */
 
+% Define the base order, families, genuses, and species
 order(pelecaniformes).
 
 family(pelecanidae).
@@ -223,21 +229,24 @@ hasSciName(C, N) :- hasCommonName(N, C), genus(N); family(N); order(N).
 hasCompoundName(G, S, N) :- hasCommonName(G, S, X), hasCommonName(N, X), \+(G = N), \+(S = N).
 
 %%%%%%%%%% isaStrict %%%%%%%%%%
-isaStrict(A, B) :- hasParent2(A,B).
-isaStrict(A, A) :- hasParent2(A,_).
-isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).
+isaStrict(A, B) :- hasParent2(A,B).                             % Check for a direct parent
+isaStrict(A, A) :- hasParent2(A,_).                             % Ensure that every valid entry is a parent of itself
+isaStrict(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).   % Try to find SOME parent X of A, then recurse to see if B is an ancestor of X
 
 %%%%%%%%%% isa %%%%%%%%%%
-isa(A, B) :- isaHelper(A, B).
-% Use nonvar to determine whether or not were querying with variables and thus should return anything
-isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B).
-isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y).
-isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y).
+isa(A, B) :- isaHelper(A, B).     % First, simply check if B is an ancestor of A (difference from isaStrict mentioned in isaHelper)
+% The below heads are only reached if either A or B is a common name
+% We nonvar to determine whether or not we're querying using variables, and thus whether we should return common names in a variable query
+isa(A, B) :- nonvar(A) , hasCommonName(X, A) , isaHelper(X, B). % IF A is NOT a variable, then find the specific name X associated with common name A and see if it has ancestor B
+isa(A, B) :- nonvar(B) , hasCommonName(Y, B) , isaHelper(A, Y). % IF B is NOT a variable, then find the specific name Y associated with common name B and see if A has parent Y
+isa(A, B) :- nonvar(A) , nonvar(B) , hasCommonName(X, A), hasCommonName(Y, B), isaHelper(X, Y). % IF NEITHER A nor B are variables (and are both common names), find their specific
+                                                                                                % names and check for ancestry
 
-% Like isaStrict, but with more specific rules for self-matching
+% Works like isaStrict, but with more specific rules for self-matching
 isaHelper(A, B) :- hasParent2(A,B).
-isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B).
+% We only allow names which are either order names, family names, and compound species names
 isaHelper(A, A) :- order(A) ; family(A) ; hasParent2(A, X) ; (var(A) , hasCommonName(Y, A)).
+isaHelper(A, B) :- hasParent2(A,X) , isaStrict(X,B), \+(X=B).
 
 %%%%%%%%%% synonym %%%%%%%%%%
 synonym(A, B) :- hasCommonName(B, A), A \= B.                    %A is a common name of scientific name B
@@ -245,11 +254,11 @@ synonym(A, B) :- hasCommonName(A, B), A \= B.
 synonym(A, B) :- hasCommonName(C, A), hasCommonName(C, B), A \= B.
 
 %%%%%%%%%% countSpecies %%%%%%%%%%
-countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).                  %If A is some name that isn't order, family, genus, or compound species name, then N is 0.
-countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).                                           %If A is a species, then n is 1
-countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), makeList(A, List), length(List, N). %N is equal to the length of a list with all species who parents are A
-makeList(A, List) :- findall(species(X), makeListGoal(A,X), List ).                                   %make a list of all species who parents are A
-makeListGoal(A, S) :-  isaStrict(C, A), hasCompoundName(_, S, C), species(S).                         %Set goal for findAll, find all species that whos parents are A
+countSpecies(A, 0) :- \+order(A), \+family(A), \+genus(A), \+hasCompoundName(_,_,A).                  % If A is some name that isn't order, family, genus, or compound species name, then N is 0.
+countSpecies(A, 1) :- hasCompoundName(_, S, A), species(S).                                           % If A is a species, then n is 1
+countSpecies(A, N) :- atom(A), (order(A) ; family(A) ; genus(A)), makeList(A, List), length(List, N). % N is equal to the length of a list with all species who parents are A
+makeList(A, List) :- findall(species(X), makeListGoal(A,X), List ).                                   % make a list of all species who parents are A
+makeListGoal(A, S) :-  isaStrict(C, A), hasCompoundName(_, S, C), species(S).                         % Set goal for findAll, find all species that whos parents are A
 
 %%%%%%%%%% rangesTo %%%%%%%%%%
 rangesTo(pelecanus_erythrorhynchos,canada).
